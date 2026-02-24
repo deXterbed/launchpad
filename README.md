@@ -2,9 +2,30 @@
 
 Run all your project services with a single button—no more opening 10 terminals and starting each service by hand. Think **Procfile** (Rails/Heroku style) inside VS Code, with **Foreman-style** aggregated output in one terminal.
 
+**One terminal. One Ctrl+C. No tab hunting.**
+
+![Demo](./images/demo.gif)
+
+## Quick Start (30 seconds)
+
+1. In your project root, create a `Procfile`:
+   ```
+   web: npm run dev
+   api: npm run start
+   ```
+2. Click **▶ Launchpad** in the status bar (bottom right).  
+   Done.
+
+## Why not docker-compose?
+
+- No containers
+- Uses your local dev env
+- Runs inside VS Code
+- Zero setup
+
 ## Features
 
-- **Start All** – Reads a `Procfile` or `launchpad.json` in your workspace root and starts every process in a **single terminal**. Output is aggregated with `[process_name]` prefixes so you can follow all services in one place.
+- **Start All** – Reads a `Procfile` or `launchpad.json` in your workspace root and starts every process in a **single terminal** (most tools spawn many; Launchpad aggregates). Output is prefixed with `[process_name]` so you can follow all services in one place.
 - **Stop All** – Stops every process and closes the Launchpad terminal. You can also press **Ctrl+C** in the terminal or close the terminal tab to stop everything.
 - **Interactive** – You can type in the terminal; input is sent to the **first** process (e.g. for a REPL). Ctrl+C always kills all processes.
 - **Status bar button** – A **Launchpad** button in the status bar (bottom right): click **▶ Launchpad** to start all processes, or **⏹ Launchpad** to stop. No need to open the Command Palette.
@@ -66,7 +87,7 @@ If both `Procfile` and `launchpad.json` exist, `launchpad.json` is used.
 - VS Code or Cursor `^1.105.0`
 - A workspace folder open (single or multi-root; in multi-root, the first folder or one that contains a config is used).
 
-## Testing the extension
+## Contributing / Development
 
 1. **Build and run**
    - Open the Launchpad repo in VS Code.
