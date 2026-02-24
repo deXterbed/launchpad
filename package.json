@@ -3,8 +3,9 @@
   "publisher": "deXterbed",
   "displayName": "Launchpad",
   "description": "Launch all project services from a single button",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "license": "MIT",
+  "icon": "icon.png",
   "repository": {
     "type": "git",
     "url": "https://github.com/deXterbed/launchpad.git"
