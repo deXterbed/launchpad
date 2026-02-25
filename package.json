@@ -1,7 +1,7 @@
 {
-  "name": "launchpad",
+  "name": "launchpad-vsc",
   "publisher": "deXterbed",
-  "displayName": "Launchpad",
+  "displayName": "Launchpad VSC",
   "description": "Launch all project services from a single button",
   "version": "0.0.5",
   "license": "MIT",
