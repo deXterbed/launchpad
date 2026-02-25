@@ -3,7 +3,7 @@
   "publisher": "deXterbed",
   "displayName": "Launchpad",
   "description": "Launch all project services from a single button",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "license": "MIT",
   "icon": "icon.png",
   "repository": {

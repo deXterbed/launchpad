@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import * as childProcess from 'child_process';
+import * as os from 'os';
 import type { ResolvedConfig } from './config';
 import { createLineBufferedWriter } from './lineBuffer';
 
@@ -40,6 +41,8 @@ export class LaunchpadPty implements vscode.Pseudoterminal {
 				cwd,
 				env,
 				windowsHide: true,
+				// On Unix, use a new process group so we can kill shell + all children (e.g. conda, python) together
+				...(os.platform() !== 'win32' ? { detached: true } : {}),
 			});
 
 			this.children.push(child);
@@ -80,7 +83,7 @@ export class LaunchpadPty implements vscode.Pseudoterminal {
 	close(): void {
 		for (const child of this.children) {
 			try {
-				child.kill();
+				this.killProcessTree(child);
 			} catch {
 				// ignore if already exited
 			}
@@ -88,5 +91,34 @@ export class LaunchpadPty implements vscode.Pseudoterminal {
 		this.children = [];
 		this.writeEmitter.fire(`[${TERMINAL_NAME}] All processes stopped.\r\n`);
 		this.closeEmitter.fire();
+	}
+
+	/**
+	 * Kill the process and its entire tree (e.g. shell -> conda -> python).
+	 * Plain child.kill() only kills the shell, leaving Python/conda running.
+	 */
+	private killProcessTree(child: childProcess.ChildProcess): void {
+		if (child.pid === undefined) {
+			child.kill();
+			return;
+		}
+		if (os.platform() === 'win32') {
+			try {
+				childProcess.execSync(`taskkill /T /F /PID ${child.pid}`, {
+					stdio: 'ignore',
+					windowsHide: true,
+				});
+			} catch {
+				// Process or tree may already be gone
+				child.kill();
+			}
+		} else {
+			// Unix: we spawned with detached: true so the shell is the process group leader
+			try {
+				process.kill(-child.pid, 'SIGTERM');
+			} catch {
+				child.kill();
+			}
+		}
 	}
 }
