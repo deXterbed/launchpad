@@ -35,6 +35,9 @@ export class LaunchpadPty implements vscode.Pseudoterminal {
 				TERM: 'xterm-256color',
 				...proc.env,
 			};
+			// VS Code is an Electron app and sets ELECTRON_RUN_AS_NODE=1 in its environment.
+			// Remove it so that any Electron apps spawned here run as Electron, not plain Node.js.
+			delete (env as Record<string, string | undefined>)['ELECTRON_RUN_AS_NODE'];
 
 			const child = childProcess.spawn(proc.command, [], {
 				shell: true,
